@@ -4,3 +4,5 @@ pickle5
 numpy
 scikit-surprise
 gunicorn
+pandas
+pycopy-collections.defaultdict
