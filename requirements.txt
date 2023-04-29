@@ -1,5 +1,5 @@
 virtualenv
 flask
-pickle
+pickle5
 numpy
 surprise
