@@ -1,0 +1,5 @@
+virtualenv
+flask
+pickle
+numpy
+surprise
