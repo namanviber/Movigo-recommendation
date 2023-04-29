@@ -1,4 +1,4 @@
 flask
 pickle5
 numpy
-surprise
+scikit-surprise
