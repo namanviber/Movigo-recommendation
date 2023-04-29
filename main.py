@@ -8,7 +8,7 @@ from surprise import Dataset
 from collections import defaultdict
 
 
-app=Flask(_name_)
+app=Flask(__name__)
 svd_model=pickle.load(open('Scaled_ratings.pkl','rb'))
 svd_algo=pickle.load(open('svd_model.pkl','rb'))
 df = pickle.load(open("testRating.pkl","rb"))
@@ -68,5 +68,5 @@ def user_recommendation(json_input, userid):
     return pred
 
 
-if _name=="__main_":
+if __name__=="__main_":
     app.run(debug=True)
