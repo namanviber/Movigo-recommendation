@@ -7,7 +7,7 @@ svd_model=pickle.load(open('Scaled_ratings.pkl','rb'))
 
 
 
-@app.route('/predict',methods=['POST','GET'])
+@app.route('/',methods=['POST','GET'])
 def predict():
     input_data=request.get_json()
 
@@ -21,7 +21,7 @@ def predict():
         user_ratings.append((user_id, movie_id, rating_value))
 
     print(user_ratings)
-    return ''
+    return render_template('index.html')
 
 
 
