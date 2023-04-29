@@ -5,4 +5,4 @@ numpy
 scikit-surprise
 gunicorn
 pandas
-pycopy-collections.defaultdict
+collection
