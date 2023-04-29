@@ -1,6 +1,7 @@
 import pickle
 import numpy as np
 from flask import Flask,render_template,request,jsonify
+import os
 
 app=Flask(__name__)
 svd_model=pickle.load(open('Scaled_ratings.pkl','rb'))
@@ -24,11 +25,10 @@ def predict():
     return ''
 
 
-
+port = int(os.environ.get('PORT', 5000))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
-
+    app.run(host='0.0.0.0', port=port)
 
 
 
