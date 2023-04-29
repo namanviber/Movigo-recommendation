@@ -24,7 +24,7 @@ def predict():
         user_ratings.append((user_id, movie_id, rating_value))
 
     print(user_ratings)
-    return render_template('index.html',prediction_text=f'Total{user_ratings[0]}')
+    return user_ratings
 
 
 
