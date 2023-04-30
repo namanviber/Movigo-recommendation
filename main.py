@@ -14,7 +14,6 @@ app=Flask(__name__)
 user_ratings_scaled=pickle.load(open('Scaled_ratings.pkl','rb'))
 user_ratings = pickle.load(open('pivot.pkl','rb'))
 svd_algo=pickle.load(open('newModel.pkl','rb'))
-df = pickle.load(open("testRating.pkl","rb"))
 df = pd.read_csv('testRatings.csv')
 
 
