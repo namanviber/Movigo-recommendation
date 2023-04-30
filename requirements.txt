@@ -6,3 +6,4 @@ scikit-surprise
 gunicorn
 pandas
 collection
+scikit-learn
