@@ -10,7 +10,7 @@ from collections import defaultdict
 
 app=Flask(__name__)
 svd_model=pickle.load(open('Scaled_ratings.pkl','rb'))
-svd_algo=pickle.load(open('svd_model.pkl','rb'))
+svd_algo=pickle.load(open('newModel.pkl','rb'))
 df = pickle.load(open("testRating.pkl","rb"))
 
 
