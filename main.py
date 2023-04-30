@@ -3,15 +3,19 @@ import numpy as np
 from flask import Flask,render_template,request,jsonify
 import pandas as pd
 from surprise.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 from surprise.reader import Reader
 from surprise import Dataset
 from collections import defaultdict
-
+import json
+from sklearn.metrics.pairwise import cosine_similarity
 
 app=Flask(__name__)
-svd_model=pickle.load(open('Scaled_ratings.pkl','rb'))
+user_ratings_scaled=pickle.load(open('Scaled_ratings.pkl','rb'))
+user_ratings = pickle.load(open('pivot.pkl','rb'))
 svd_algo=pickle.load(open('newModel.pkl','rb'))
 df = pickle.load(open("testRating.pkl","rb"))
+df = pd.read_csv('testRatings.csv')
 
 
 @app.route('/')
@@ -23,12 +27,38 @@ def index():
 def predict():
     input_data=request.get_json()
 
-    # input=np.array(input_data['inp'])
-    # print(input_data)
-
-    # user = similar_user(input_data)
-    pred = user_recommendation(input_data,346)
+    user = similar_user(input_data)
+    pred = user_recommendation(input_data,user)
+    # item = item_recommendation(input_data)
+    # dict = {"user":pred,"item":item}
+    # return dict
     return pred
+
+def similar_user(json_input):
+
+    # Json to Dataframe
+    dfItem = pd.DataFrame.from_records(json_input)
+
+    # Converting to pivot
+    user = dfItem.pivot_table(columns='tmdbId', values='rating')
+    concat = pd.concat([user_ratings,user], ignore_index= True)
+    newuser = concat.tail(1)
+    newuser.fillna(0, inplace=True)
+
+    # Scale pivot element
+    arr = newuser.to_numpy()
+    scaler = MinMaxScaler()
+    scaler.fit_transform(user_ratings_scaled)
+    scaled_arr = scaler.transform(arr.reshape(1,-1))
+
+    # getting similar user
+    similarity_scores = cosine_similarity(scaled_arr, user_ratings_scaled)
+
+    # print similar user
+    similarity_scores = list(enumerate(similarity_scores[0]))
+    similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+    top_k_users = [i[0] for i in similarity_scores[1:10+1]]
+    return top_k_users[0]
 
 def user_recommendation(json_input, userid):
 
@@ -64,9 +94,12 @@ def user_recommendation(json_input, userid):
     predicted_df = pd.DataFrame([(id, pair[0],pair[1]) for id, row in top_n.items() for pair in row],
                         columns=["userId" ,"tmdbId","rat_pred"])
     pred = predicted_df[predicted_df["userId"] == (userid)]["tmdbId"].tolist()
+    dict = {"tmdbId":pred}
+    output = json.dumps(dict, indent=2)
 
     return pred
 
 
-if __name__=="__main_":
-    app.run(debug=True)
+if __name__=="__main__":
+    app.run( debug= True)
+   
